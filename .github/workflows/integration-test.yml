@@ -5,10 +5,9 @@ on:
     branches:
       - 'master'
 
-
 jobs:
   apk:
-    name: Generate APK
+    name: Generate artifacts
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -18,23 +17,32 @@ jobs:
         with:
           java-version: 1.8
 
-      - name: Assemble debug app
+      - name: Assemble app
         run: ./gradlew assembleDebug
 
-      - name: Export Debug APK
+      - name: Export app APK
         uses: actions/upload-artifact@v2
         with:
-          name: apk
+          name: app
           path: app/build/outputs/apk/debug/app-debug.apk
 
       - name: Assemble app instrumentation tests
         run: ./gradlew assembleDebugAndroidTest
 
-      - name: Export App Test APK
+      - name: Export androidTest APK
         uses: actions/upload-artifact@v2
         with:
-          name: app_androidTest
+          name: app
           path: app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+
+      - name: Assemble mylibrary instrumentation tests
+        run: ./gradlew :mylibrary:assembleDebugAndroidTest
+
+      - name: Export mylibrary APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: app
+          path: mylibrary/build/outputs/apk/androidTest/debug/mylibrary-debug-androidTest.apk
 
   firebase:
     name: Execute Test Lab
@@ -44,21 +52,19 @@ jobs:
       - name: Download debug APK
         uses: actions/download-artifact@v2
         with:
-          name: apk
+          name: app
 
       - name: Login to Google Cloud
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
           version: 270.0.0
-          service_account_key: ${{ secrets.GCLOUD_AUTH_DEVICE_LAB }}
+          service_account_key: ${{ secrets.GCLOUD_AUTH }}
 
       - name: Set current project
-        run: gcloud config set project ${{ secrets.FIREBASE_PROJECT_ID_DEVICE_LAB }}
+        run: gcloud config set project ${{ secrets.FIREBASE_PROJECT_ID }}
 
-      - name: Download App test APK
-        uses: actions/download-artifact@v2
-        with:
-          name: app_androidTest
-
-      - name: Run App Instrumentation Tests in Firebase Test Lab
+      - name: Run app Instrumentation Tests in Firebase Test Lab
         run: gcloud firebase test android run --type instrumentation --app app-debug.apk --test app-debug-androidTest.apk --use-orchestrator --device model=Pixel2,version=28,locale=en,orientation=portrait
+
+      - name: Run mylibrary Instrumentation Tests in Firebase Test Lab
+        run: gcloud firebase test android run --type instrumentation --app app-debug.apk --test mylibrary-debug-androidTest.apk --use-orchestrator --device model=Pixel2,version=28,locale=en,orientation=portrait
