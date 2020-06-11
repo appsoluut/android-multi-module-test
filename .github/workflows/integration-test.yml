@@ -63,8 +63,8 @@ jobs:
       - name: Set current project
         run: gcloud config set project ${{ secrets.FIREBASE_PROJECT_ID }}
 
-      - name: Run app Instrumentation Tests in Firebase Test Lab
-        run: gcloud firebase test android run --type instrumentation --app app-debug.apk --test app-debug-androidTest.apk --use-orchestrator --device model=Pixel2,version=28,locale=en,orientation=portrait
-
-      - name: Run mylibrary Instrumentation Tests in Firebase Test Lab
-        run: gcloud firebase test android run --type instrumentation --app app-debug.apk --test mylibrary-debug-androidTest.apk --use-orchestrator --device model=Pixel2,version=28,locale=en,orientation=portrait
+#      - name: Run app Instrumentation Tests in Firebase Test Lab
+#        run: gcloud firebase test android run --type instrumentation --app app-debug.apk --test app-debug-androidTest.apk --use-orchestrator --device model=Pixel2,version=28,locale=en,orientation=portrait
+#
+#      - name: Run mylibrary Instrumentation Tests in Firebase Test Lab
+#        run: gcloud firebase test android run --type instrumentation --app app-debug.apk --test mylibrary-debug-androidTest.apk --use-orchestrator --device model=Pixel2,version=28,locale=en,orientation=portrait
