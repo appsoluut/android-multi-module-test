@@ -17,6 +17,9 @@ jobs:
         with:
           java-version: 1.8
 
+      - name: Determine version code
+        run: echo '::set-env name=ANDROID_VERSION_CODE::$(git rev-list HEAD | wc -l | tr -d " ")0'
+
       - name: Assemble app
         run: ./gradlew assembleDebug
 
@@ -44,27 +47,27 @@ jobs:
           name: app
           path: mylibrary/build/outputs/apk/androidTest/debug/mylibrary-debug-androidTest.apk
 
-  firebase:
-    name: Execute Test Lab
-    needs: apk
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download debug APK
-        uses: actions/download-artifact@v2
-        with:
-          name: app
-
-      - name: Login to Google Cloud
-        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
-        with:
-          version: 270.0.0
-          service_account_key: ${{ secrets.GCLOUD_AUTH }}
-
-      - name: Set current project
-        run: gcloud config set project ${{ secrets.FIREBASE_PROJECT_ID }}
-
-      - name: Run app Instrumentation Tests in Firebase Test Lab
-        run: gcloud firebase test android run --type instrumentation --app app-debug.apk --test app-debug-androidTest.apk --use-orchestrator --device model=Pixel2,version=28,locale=en,orientation=portrait
-
-      - name: Run mylibrary Instrumentation Tests in Firebase Test Lab
-        run: gcloud firebase test android run --type instrumentation --app app-debug.apk --test mylibrary-debug-androidTest.apk --use-orchestrator --device model=Pixel2,version=28,locale=en,orientation=portrait
+#  firebase:
+#    name: Execute Test Lab
+#    needs: apk
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Download debug APK
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: app
+#
+#      - name: Login to Google Cloud
+#        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+#        with:
+#          version: 270.0.0
+#          service_account_key: ${{ secrets.GCLOUD_AUTH }}
+#
+#      - name: Set current project
+#        run: gcloud config set project ${{ secrets.FIREBASE_PROJECT_ID }}
+#
+#      - name: Run app Instrumentation Tests in Firebase Test Lab
+#        run: gcloud firebase test android run --type instrumentation --app app-debug.apk --test app-debug-androidTest.apk --use-orchestrator --device model=Pixel2,version=28,locale=en,orientation=portrait
+#
+#      - name: Run mylibrary Instrumentation Tests in Firebase Test Lab
+#        run: gcloud firebase test android run --type instrumentation --app app-debug.apk --test mylibrary-debug-androidTest.apk --use-orchestrator --device model=Pixel2,version=28,locale=en,orientation=portrait
