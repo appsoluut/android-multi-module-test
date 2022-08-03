@@ -13,7 +13,7 @@ sonarqube {
 
 android {
     compileSdkVersion 31
-    buildToolsVersion "30.0.0"
+    buildToolsVersion "32.0.0"
 
     defaultConfig {
         applicationId "com.appsoluut.android.myapplication"
