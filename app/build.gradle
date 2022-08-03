@@ -3,15 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'org.sonarqube'
 
-sonarqube {
-  properties {
-    property "sonar.projectKey", "appsoluut_android-multi-module-test"
-    property "sonar.organization", "appsoluut"
-    property "sonar.host.url", "https://sonarcloud.io"
-    property "sonar.projectName", "Android Multi Module Test"
-  }
-}
-
 android {
     compileSdkVersion 31
     buildToolsVersion "32.0.0"
@@ -57,7 +48,16 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+}
 
+sonarqube {
+  properties {
+    property "sonar.projectKey", "appsoluut_android-multi-module-test"
+    property "sonar.projectVersion", android.defaultConfig.versionName
+    property "sonar.organization", "appsoluut"
+    property "sonar.host.url", "https://sonarcloud.io"
+    property "sonar.projectName", rootProject.name
+  }
 }
 
 dependencies {
