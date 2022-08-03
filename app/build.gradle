@@ -12,22 +12,13 @@ sonarqube {
 }
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
-
-    signingConfigs {
-        release {
-            storeFile file("../cert/android_signkey_sanoma.keystore")
-            storePassword "s4n0m4m0b1l"
-            keyAlias "sanomamedia"
-            keyPassword "s4n0m4m0b1l"
-        }
-    }
+    compileSdkVersion 31
+    buildToolsVersion "30.0.0"
 
     defaultConfig {
         applicationId "com.appsoluut.android.myapplication"
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 31
         versionCode generateVersionCode()
         versionName "1.0"
 
