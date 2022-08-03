@@ -15,6 +15,15 @@ android {
     compileSdkVersion 31
     buildToolsVersion "32.0.0"
 
+    signingConfigs {
+        release {
+            storeFile file("../cert/android_signkey_sanoma.keystore")
+            storePassword "s4n0m4m0b1l"
+            keyAlias "sanomamedia"
+            keyPassword "s4n0m4m0b1l"
+        }
+    }
+    
     defaultConfig {
         applicationId "com.appsoluut.android.myapplication"
         minSdkVersion 21
